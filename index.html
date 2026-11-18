@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happ-Mashonga Family Secret Santa 2026</title>
+<title>Happ-Mashonga Christmas 2026</title>
 
 <style>
 :root {
@@ -13,9 +13,7 @@
   --cream:#fff5e6;
 }
 
-* {
-  box-sizing:border-box;
-}
+* { box-sizing:border-box; }
 
 body {
   margin:0;
@@ -46,9 +44,7 @@ body {
 }
 
 @keyframes fall {
-  to {
-    transform:translateY(110vh) rotate(360deg);
-  }
+  to { transform:translateY(110vh) rotate(360deg); }
 }
 
 .top {
@@ -113,11 +109,21 @@ h1 {
   margin-top:22px;
 }
 
-/* Larger Christmas envelope */
-
-.envelope-area {
-  margin:42px auto 30px;
+.tap-hint {
+  color:var(--gold);
+  font-size:19px;
+  font-weight:bold;
+  letter-spacing:1px;
+  margin-top:28px;
+  text-shadow:0 2px 8px #0008;
+  animation:pulse 1.8s infinite;
 }
+
+@keyframes pulse {
+  50% { opacity:.65; }
+}
+
+.envelope-area { margin:42px auto 30px; }
 
 .envelope {
   width:250px;
@@ -131,9 +137,7 @@ h1 {
   transition:transform .3s;
 }
 
-.envelope:hover {
-  transform:translateY(-5px);
-}
+.envelope:hover { transform:translateY(-5px); }
 
 .envelope:before {
   content:"";
@@ -146,9 +150,7 @@ h1 {
   z-index:3;
 }
 
-.envelope.open:before {
-  transform:rotateX(180deg);
-}
+.envelope.open:before { transform:rotateX(180deg); }
 
 .envelope:after {
   content:"";
@@ -176,29 +178,7 @@ h1 {
   transition:opacity .4s;
 }
 
-.envelope.open .seal {
-  opacity:0;
-}
-
-/* Prominent invitation instruction */
-
-.tap-hint {
-  color:var(--gold);
-  font-size:19px;
-  font-weight:bold;
-  letter-spacing:1px;
-  margin-top:28px;
-  text-shadow:0 2px 8px #0008;
-  animation:pulse 1.8s infinite;
-}
-
-@keyframes pulse {
-  50% {
-    opacity:.65;
-  }
-}
-
-/* Centred invitation pop-up */
+.envelope.open .seal { opacity:0; }
 
 .message {
   display:none;
@@ -211,17 +191,16 @@ h1 {
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
-  width:min(520px,calc(100vw - 32px));
-  max-height:85vh;
+  width:min(540px,calc(100vw - 28px));
+  max-height:88vh;
   overflow-y:auto;
-  margin:0;
   padding:28px 24px;
   border:1px solid var(--gold);
   background:#fff4e9;
   color:#4b1722;
   border-radius:6px;
   box-shadow:0 0 0 100vmax #000a,0 15px 45px #0008;
-  animation:appear .7s ease;
+  animation:appear .5s ease;
 }
 
 @keyframes appear {
@@ -236,9 +215,7 @@ h1 {
   line-height:1.3;
 }
 
-.message p {
-  line-height:1.7;
-}
+.message p { line-height:1.7; }
 
 .gold-button {
   display:inline-block;
@@ -246,11 +223,11 @@ h1 {
   color:#421521;
   border:none;
   border-radius:3px;
-  padding:15px 24px;
+  padding:14px 22px;
   font-family:Georgia,serif;
   font-size:16px;
   cursor:pointer;
-  margin-top:15px;
+  margin-top:12px;
 }
 
 .close-button {
@@ -264,6 +241,72 @@ h1 {
   font-family:Georgia,serif;
 }
 
+.hidden { display:none!important; }
+
+#registrationForm {
+  text-align:left;
+  margin-top:20px;
+}
+
+#registrationForm label {
+  display:block;
+  font-size:14px;
+  font-weight:bold;
+  margin:15px 0 6px;
+  color:#57202c;
+}
+
+#registrationForm input,
+#registrationForm select,
+#registrationForm textarea {
+  width:100%;
+  padding:12px;
+  border:1px solid #d8bda7;
+  border-radius:4px;
+  background:#fffdf9;
+  color:#39141d;
+  font-family:Arial,sans-serif;
+  font-size:15px;
+}
+
+#registrationForm textarea {
+  min-height:65px;
+  resize:vertical;
+}
+
+#registrationForm input:focus,
+#registrationForm select:focus,
+#registrationForm textarea:focus {
+  outline:2px solid #bd8b3d;
+}
+
+.field-note {
+  font-size:12px;
+  color:#785b55;
+  margin-top:5px;
+}
+
+.budget {
+  background:#f3e5d2;
+  padding:12px;
+  border-left:3px solid #bd8b3d;
+  margin:16px 0;
+  font-size:14px;
+  line-height:1.6;
+}
+
+#formStatus {
+  margin-top:15px;
+  font-size:14px;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+
+#submitButton:disabled {
+  opacity:.6;
+  cursor:wait;
+}
+
 footer {
   position:relative;
   z-index:2;
@@ -272,8 +315,12 @@ footer {
   font-size:13px;
 }
 
-.hidden {
-  display:none!important;
+.honeypot {
+  position:absolute!important;
+  left:-10000px!important;
+  width:1px!important;
+  height:1px!important;
+  overflow:hidden!important;
 }
 
 @media(max-width:480px) {
@@ -283,27 +330,13 @@ footer {
     padding:0 55px 0 0;
   }
 
-  .language {
-    top:15px;
-  }
+  .language { top:15px; }
+  main { padding-top:28px; }
+  .subtitle { font-size:16px; }
+  .tap-hint { font-size:18px; }
 
-  main {
-    padding-top:28px;
-  }
-
-  .subtitle {
-    font-size:16px;
-  }
-
-  .tap-hint {
-    font-size:18px;
-  }
-
-  .message.show {
-    padding:24px 18px;
-  }
+  .message.show { padding:22px 17px; }
 }
-
 </style>
 </head>
 
@@ -312,87 +345,45 @@ footer {
 <div class="snow" id="snow"></div>
 
 <header class="top">
-  <div class="brand">
-    HAPP-MASHONGA FAMILY SECRET SANTA 2026
-  </div>
-
-  <button class="language" id="language" onclick="switchLanguage()">
-    Deutsch
-  </button>
+  <div class="brand">HAPP-MASHONGA FAMILY SECRET SANTA 2026</div>
+  <button class="language" id="language" onclick="switchLanguage()">Deutsch</button>
 </header>
 
 <main>
 
   <div id="english">
-
-    <div class="eyebrow">
-      The most wonderful time of the year
-    </div>
-
+    <div class="eyebrow">The most wonderful time of the year</div>
     <h1>Secret Santa<br>2026</h1>
-
-    <p class="subtitle">
-      The Happ-Mashonga Family Christmas Gift Exchange
-    </p>
-
-    <p>
-      One family. A little mystery. A lot of Christmas magic.
-    </p>
-
+    <p class="subtitle">The Happ-Mashonga Family Christmas Gift Exchange</p>
+    <p>One family. A little mystery. A lot of Christmas magic.</p>
     <div class="details">
       UK gift budget: £20<br>
       Germany gift budget: €25<br>
       Registration closes: 30 November 2026
     </div>
-
-    <p class="tap-hint">
-      ✦ Tap the envelope to open your invitation ✦
-    </p>
-
+    <p class="tap-hint">✦ Tap the envelope to open your invitation ✦</p>
   </div>
 
   <div id="german" class="hidden">
-
-    <div class="eyebrow">
-      Die schönste Zeit des Jahres
-    </div>
-
+    <div class="eyebrow">Die schönste Zeit des Jahres</div>
     <h1>Wichteln<br>2026</h1>
-
-    <p class="subtitle">
-      Das Weihnachtsgeschenkspiel der Familie Happ-Mashonga
-    </p>
-
-    <p>
-      Eine Familie. Ein kleines Geheimnis. Ganz viel Weihnachtszauber.
-    </p>
-
+    <p class="subtitle">Das Weihnachtsgeschenkspiel der Familie Happ-Mashonga</p>
+    <p>Eine Familie. Ein kleines Geheimnis. Ganz viel Weihnachtszauber.</p>
     <div class="details">
       Geschenkbudget UK: £20<br>
       Geschenkbudget Deutschland: €25<br>
       Anmeldeschluss: 30. November 2026
     </div>
-
-    <p class="tap-hint">
-      ✦ Tippe auf den Umschlag, um deine Einladung zu öffnen ✦
-    </p>
-
+    <p class="tap-hint">✦ Tippe auf den Umschlag, um deine Einladung zu öffnen ✦</p>
   </div>
 
   <div class="envelope-area">
-
-    <div
-      class="envelope"
-      id="envelope"
-      onclick="openEnvelope()"
-      role="button"
-      tabindex="0"
-      aria-label="Open Christmas invitation">
-
+    <div class="envelope" id="envelope"
+         onclick="openEnvelope()"
+         role="button" tabindex="0"
+         aria-label="Open Christmas invitation">
       <div class="seal">✦</div>
-
     </div>
-
   </div>
 
 </main>
@@ -400,90 +391,163 @@ footer {
 <section class="message" id="message">
 
   <div id="englishMessage">
-
     <div class="eyebrow">A special invitation</div>
-
     <h2>Happy Happ-Mashonga Christmas!</h2>
-
-    <p>
-      You're invited to our 2026 family Secret Santa!
-    </p>
-
+    <p>You're invited to our 2026 family Secret Santa!</p>
     <p>
       The most wonderful gifts are not always wrapped.
-      They are the laughter, kindness and memories we
-      share with the people we love.
+      They are the laughter, kindness and memories we share
+      with the people we love.
     </p>
-
     <p>
-      This Christmas, you'll be secretly assigned
-      someone special to surprise with a gift.
+      This Christmas, you'll be secretly assigned someone
+      special to surprise with a gift.
     </p>
+    <p><strong>UK: £20 | Germany: €25</strong><br>
+    Registration closes 30 November 2026.</p>
 
-    <p>
-      <strong>UK: £20 | Germany: €25</strong><br>
-      Registration closes 30 November 2026.
-    </p>
-
-    <button class="gold-button" onclick="registrationNotice()">
+    <button class="gold-button" onclick="showRegistration()">
       Register for Secret Santa
     </button>
-
-    <button class="close-button" onclick="closeMessage()">
-      Close invitation
-    </button>
-
+    <button class="close-button" onclick="closeMessage()">Close invitation</button>
   </div>
 
   <div id="germanMessage" class="hidden">
-
     <div class="eyebrow">Eine besondere Einladung</div>
-
     <h2>Frohe Happ-Mashonga Weihnachten!</h2>
-
-    <p>
-      Du bist herzlich zu unserem Familien-Wichteln 2026 eingeladen!
-    </p>
-
+    <p>Du bist herzlich zu unserem Familien-Wichteln 2026 eingeladen!</p>
     <p>
       Die schönsten Geschenke sind nicht immer eingepackt.
-      Es sind das Lachen, die Herzlichkeit und die
-      Erinnerungen, die wir miteinander teilen.
+      Es sind das Lachen, die Herzlichkeit und die Erinnerungen,
+      die wir miteinander teilen.
     </p>
-
     <p>
-      Dieses Weihnachten wird dir heimlich eine
-      besondere Person zugelost, die du beschenken darfst.
+      Dieses Weihnachten wird dir heimlich eine besondere
+      Person zugelost, die du beschenken darfst.
     </p>
+    <p><strong>UK: £20 | Deutschland: €25</strong><br>
+    Anmeldeschluss: 30. November 2026.</p>
 
-    <p>
-      <strong>UK: £20 | Deutschland: €25</strong><br>
-      Anmeldeschluss: 30. November 2026.
-    </p>
-
-    <button class="gold-button" onclick="registrationNotice()">
+    <button class="gold-button" onclick="showRegistration()">
       Für Secret Santa anmelden
     </button>
+    <button class="close-button" onclick="closeMessage()">Einladung schliessen</button>
+  </div>
 
-    <button class="close-button" onclick="closeMessage()">
-      Einladung schliessen
+  <div id="registration" class="hidden">
+    <div class="eyebrow" id="formEyebrow">Your Christmas registration</div>
+    <h2 id="formTitle">Join Secret Santa 2026</h2>
+    <p id="formIntro">Please complete all required fields. Your registration cannot be edited afterwards.</p>
+
+    <div class="budget" id="budgetInfo">
+      Gift budget: £20 for UK participants or €25 for Germany participants.
+    </div>
+
+    <form id="registrationForm">
+
+      <label for="fullName" id="nameLabel">Full name *</label>
+      <input id="fullName" name="fullName" type="text"
+             maxlength="100" autocomplete="name" required>
+
+      <label for="email" id="emailLabel">Email address *</label>
+      <input id="email" name="email" type="email"
+             maxlength="254" autocomplete="email" required>
+
+      <label for="country" id="countryLabel">Country *</label>
+      <select id="country" name="country" required>
+        <option value="">Select your country</option>
+        <option value="UK">United Kingdom</option>
+        <option value="Germany">Germany</option>
+      </select>
+
+      <label for="wish1" id="wish1Label">Gift wish 1 *</label>
+      <textarea id="wish1" name="wish1" maxlength="500" required></textarea>
+      <label for="link1" id="link1Label">Gift link 1 (optional)</label>
+      <input id="link1" name="link1" type="url" maxlength="1000"
+             placeholder="https://...">
+
+      <label for="wish2" id="wish2Label">Gift wish 2 *</label>
+      <textarea id="wish2" name="wish2" maxlength="500" required></textarea>
+      <label for="link2" id="link2Label">Gift link 2 (optional)</label>
+      <input id="link2" name="link2" type="url" maxlength="1000"
+             placeholder="https://...">
+
+      <label for="wish3" id="wish3Label">Gift wish 3 *</label>
+      <textarea id="wish3" name="wish3" maxlength="500" required></textarea>
+      <label for="link3" id="link3Label">Gift link 3 (optional)</label>
+      <input id="link3" name="link3" type="url" maxlength="1000"
+             placeholder="https://...">
+
+      <div class="honeypot" aria-hidden="true">
+        <label for="website">Leave this field empty</label>
+        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+      </div>
+
+      <p class="field-note" id="requiredNote">* Required fields. Registrations are final and cannot be edited.</p>
+
+      <button class="gold-button" id="submitButton" type="submit">
+        Submit registration
+      </button>
+
+      <div id="formStatus" role="status" aria-live="polite"></div>
+    </form>
+
+    <button class="close-button" onclick="backToInvitation()" id="backButton">
+      Back to invitation
     </button>
+  </div>
 
+  <div id="successMessage" class="hidden">
+    <div class="eyebrow">Registration complete</div>
+    <h2 id="successTitle">You're registered!</h2>
+    <p id="successText">
+      Thank you for joining Happ-Mashonga Christmas Secret Santa 2026.
+      Your registration has been received.
+    </p>
+    <button class="gold-button" onclick="closeMessage()">Close</button>
   </div>
 
 </section>
 
-<footer>
-  ✦ Made with love for the Happ-Mashonga family ✦
-</footer>
+<footer>✦ Made with love for the Happ-Mashonga family ✦</footer>
+
+<!-- Supabase JavaScript library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+
+// ================================================
+// ADD YOUR SUPABASE DETAILS BELOW
+// Use your Project URL and PUBLISHABLE key.
+// Never use a secret or service-role key here.
+// ================================================
+
+const SUPABASE_URL = "https://dfvhzknfcnzydzrkgwua.supabase.co"
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_S_WApSukT_pPoSnpa6U5KQ_x3SvfgYA"
+
+// Create the Supabase connection
+let db = null;
+
+try {
+  if (
+    window.supabase &&
+    SUPABASE_URL.startsWith("https://") &&
+    !SUPABASE_URL.includes("PASTE_") &&
+    !SUPABASE_PUBLISHABLE_KEY.includes("PASTE_")
+  ) {
+    db = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+  }
+} catch (error) {
+  console.error("Supabase connection setup error:", error);
+}
 
 let currentLanguage = "en";
 let opened = false;
 
 function switchLanguage() {
-
   currentLanguage = currentLanguage === "en" ? "de" : "en";
 
   document.getElementById("english").classList.toggle("hidden");
@@ -496,12 +560,12 @@ function switchLanguage() {
     currentLanguage === "en" ? "Deutsch" : "English";
 
   document.documentElement.lang = currentLanguage;
+
+  updateFormLanguage();
 }
 
 function openEnvelope() {
-
   if (opened) return;
-
   opened = true;
 
   document.getElementById("envelope").classList.add("open");
@@ -511,44 +575,254 @@ function openEnvelope() {
   }, 700);
 }
 
+document.getElementById("envelope").addEventListener("keydown", function(event) {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    openEnvelope();
+  }
+});
+
 function closeMessage() {
   document.getElementById("message").classList.remove("show");
 }
 
-function registrationNotice() {
-
-  alert(
-    currentLanguage === "en"
-      ? "Thank you for your interest! The Secret Santa registration form is coming soon."
-      : "Vielen Dank für dein Interesse! Das Anmeldeformular kommt bald."
-  );
+function showRegistration() {
+  document.getElementById("englishMessage").classList.add("hidden");
+  document.getElementById("germanMessage").classList.add("hidden");
+  document.getElementById("successMessage").classList.add("hidden");
+  document.getElementById("registration").classList.remove("hidden");
+  document.getElementById("formStatus").textContent = "";
+  updateFormLanguage();
 }
+
+function backToInvitation() {
+  document.getElementById("registration").classList.add("hidden");
+
+  if (currentLanguage === "en") {
+    document.getElementById("englishMessage").classList.remove("hidden");
+  } else {
+    document.getElementById("germanMessage").classList.remove("hidden");
+  }
+}
+
+function updateFormLanguage() {
+  const german = currentLanguage === "de";
+
+  const translations = german ? {
+    eyebrow:"Deine Weihnachtsanmeldung",
+    title:"Für Wichteln 2026 anmelden",
+    intro:"Bitte fülle alle Pflichtfelder aus. Deine Anmeldung kann danach nicht geändert werden.",
+    budget:"Geschenkbudget: £20 für Teilnehmende aus Grossbritannien oder €25 für Deutschland.",
+    name:"Vollständiger Name *",
+    email:"E-Mail-Adresse *",
+    country:"Land *",
+    countryPlaceholder:"Land auswählen",
+    uk:"Grossbritannien",
+    germany:"Deutschland",
+    wish1:"Geschenkwunsch 1 *",
+    wish2:"Geschenkwunsch 2 *",
+    wish3:"Geschenkwunsch 3 *",
+    link1:"Geschenk-Link 1 (optional)",
+    link2:"Geschenk-Link 2 (optional)",
+    link3:"Geschenk-Link 3 (optional)",
+    note:"* Pflichtfelder. Anmeldungen sind endgültig und können nicht geändert werden.",
+    submit:"Anmeldung absenden",
+    back:"Zurück zur Einladung",
+    success:"Du bist angemeldet!",
+    successText:"Vielen Dank für deine Anmeldung zum Happ-Mashonga Familien-Wichteln 2026.",
+    missing:"Bitte fülle alle Pflichtfelder aus.",
+    connection:"Die Verbindung zum Anmeldesystem ist noch nicht eingerichtet. Bitte versuche es später erneut.",
+    sending:"Deine Anmeldung wird gesendet...",
+    duplicate:"Diese E-Mail-Adresse wurde bereits angemeldet.",
+    closed:"Die Anmeldung ist geschlossen oder die Frist ist abgelaufen.",
+    invalid:"Bitte überprüfe deine Angaben und versuche es erneut.",
+    failed:"Deine Anmeldung konnte nicht gespeichert werden. Bitte versuche es erneut."
+  } : {
+    eyebrow:"Your Christmas registration",
+    title:"Join Secret Santa 2026",
+    intro:"Please complete all required fields. Your registration cannot be edited afterwards.",
+    budget:"Gift budget: £20 for UK participants or €25 for Germany participants.",
+    name:"Full name *",
+    email:"Email address *",
+    country:"Country *",
+    countryPlaceholder:"Select your country",
+    uk:"United Kingdom",
+    germany:"Germany",
+    wish1:"Gift wish 1 *",
+    wish2:"Gift wish 2 *",
+    wish3:"Gift wish 3 *",
+    link1:"Gift link 1 (optional)",
+    link2:"Gift link 2 (optional)",
+    link3:"Gift link 3 (optional)",
+    note:"* Required fields. Registrations are final and cannot be edited.",
+    submit:"Submit registration",
+    back:"Back to invitation",
+    success:"You're registered!",
+    successText:"Thank you for joining Happ-Mashonga Christmas Secret Santa 2026. Your registration has been received.",
+    missing:"Please complete all required fields.",
+    connection:"The registration connection has not been configured yet. Please try again later.",
+    sending:"Submitting your registration...",
+    duplicate:"This email address has already been registered.",
+    closed:"Registration is closed or the deadline has passed.",
+    invalid:"Please check your details and try again.",
+    failed:"Your registration could not be saved. Please try again."
+  };
+
+  const ids = {
+    formEyebrow:"eyebrow",
+    formTitle:"title",
+    formIntro:"intro",
+    budgetInfo:"budget",
+    nameLabel:"name",
+    emailLabel:"email",
+    countryLabel:"country",
+    wish1Label:"wish1",
+    wish2Label:"wish2",
+    wish3Label:"wish3",
+    link1Label:"link1",
+    link2Label:"link2",
+    link3Label:"link3",
+    requiredNote:"note",
+    submitButton:"submit",
+    backButton:"back"
+  };
+
+  for (const [elementId, translationKey] of Object.entries(ids)) {
+    const element = document.getElementById(elementId);
+    if (element) element.textContent = translations[translationKey];
+  }
+
+  const country = document.getElementById("country");
+  country.options[0].textContent = translations.countryPlaceholder;
+  country.options[1].textContent = translations.uk;
+  country.options[2].textContent = translations.germany;
+
+  document.getElementById("successTitle").textContent = translations.success;
+  document.getElementById("successText").textContent = translations.successText;
+
+  window.formTranslations = translations;
+}
+
+document.getElementById("country").addEventListener("change", function() {
+  const budget = this.value === "UK" ? "£20" :
+                 this.value === "Germany" ? "€25" : "";
+
+  if (budget) {
+    document.getElementById("budgetInfo").textContent =
+      currentLanguage === "de"
+        ? "Dein Geschenkbudget: " + budget
+        : "Your gift budget: " + budget;
+  } else {
+    updateFormLanguage();
+  }
+});
+
+document.getElementById("registrationForm").addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  const translations = window.formTranslations;
+
+  const submitButton = document.getElementById("submitButton");
+  const status = document.getElementById("formStatus");
+
+  // Basic hidden-field spam check
+  if (document.getElementById("website").value !== "") {
+    status.textContent = translations.failed;
+    return;
+  }
+
+  if (!this.reportValidity()) return;
+
+  if (!db) {
+    status.textContent = translations.connection;
+    return;
+  }
+
+  const form = new FormData(this);
+
+  const registration = {
+    p_full_name: form.get("fullName").trim(),
+    p_email: form.get("email").trim().toLowerCase(),
+    p_country: form.get("country"),
+    p_wish_1: form.get("wish1").trim(),
+    p_wish_1_link: form.get("link1").trim() || null,
+    p_wish_2: form.get("wish2").trim(),
+    p_wish_2_link: form.get("link2").trim() || null,
+    p_wish_3: form.get("wish3").trim(),
+    p_wish_3_link: form.get("link3").trim() || null
+  };
+
+  submitButton.disabled = true;
+  status.textContent = translations.sending;
+
+  try {
+    const { error } = await db.rpc(
+      "register_participant",
+      registration
+    );
+
+    if (error) {
+      console.error("Registration error:", error);
+
+      const message = (error.message || "").toLowerCase();
+
+      if (
+        message.includes("duplicate key") ||
+        message.includes("unique constraint")
+      ) {
+        status.textContent = translations.duplicate;
+      } else if (
+        message.includes("closed") ||
+        message.includes("deadline") ||
+        message.includes("registration")
+      ) {
+        status.textContent = translations.closed;
+      } else if (
+        message.includes("valid") ||
+        message.includes("required") ||
+        message.includes("country") ||
+        message.includes("link")
+      ) {
+        status.textContent = translations.invalid;
+      } else {
+        status.textContent = translations.failed;
+      }
+
+      return;
+    }
+
+    this.reset();
+    document.getElementById("budgetInfo").textContent =
+      translations.budget;
+
+    document.getElementById("registration").classList.add("hidden");
+    document.getElementById("successMessage").classList.remove("hidden");
+
+  } catch (error) {
+    console.error("Unexpected registration error:", error);
+    status.textContent = translations.failed;
+  } finally {
+    submitButton.disabled = false;
+  }
+});
 
 // Falling snow
-
 const snow = document.getElementById("snow");
 
-for (let i=0; i<55; i++) {
-
+for (let i = 0; i < 55; i++) {
   const flake = document.createElement("span");
-
   flake.className = "flake";
   flake.textContent = "❄";
-
-  flake.style.left = Math.random()*100+"%";
-  flake.style.fontSize = (8+Math.random()*13)+"px";
-
-  flake.style.animationDuration =
-    (7+Math.random()*12)+"s";
-
-  flake.style.animationDelay =
-    (-Math.random()*15)+"s";
-
+  flake.style.left = Math.random() * 100 + "%";
+  flake.style.fontSize = (8 + Math.random() * 13) + "px";
+  flake.style.animationDuration = (7 + Math.random() * 12) + "s";
+  flake.style.animationDelay = (-Math.random() * 15) + "s";
   snow.appendChild(flake);
-
 }
 
-</script>
+updateFormLanguage();
 
+</script>
 </body>
 </html>
+
