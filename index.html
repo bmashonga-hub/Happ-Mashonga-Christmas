@@ -715,9 +715,14 @@ async function showHostDashboard() {
       <h1 style="color:#762c35">🎄 Happ-Mashonga Host Dashboard</h1>
       <p>Welcome, host! Here you can manage your family Secret Santa.</p>
       <button onclick="loadHostDashboard()"
-        style="padding:10px 18px;background:#244b38;color:white;border:0;border-radius:6px;cursor:pointer">
-        Refresh dashboard
-      </button>
+  style="padding:10px 18px;background:#244b38;color:white;border:0;border-radius:6px;cursor:pointer">
+  Refresh dashboard
+</button>
+
+<button onclick="runSecretSantaDraw()"
+  style="padding:10px 18px;background:#b28a3b;color:white;border:0;border-radius:6px;cursor:pointer">
+  🎅 Run Secret Santa Draw
+</button>
       <button onclick="hostSignOut()"
         style="padding:10px 18px;background:#762c35;color:white;border:0;border-radius:6px;cursor:pointer">
         Sign out
@@ -797,6 +802,35 @@ async function changeGiftStatus(participantId, received) {
     alert("Could not update gift status: " + error.message);
     return;
   }
+
+  await loadHostDashboard();
+}
+
+async function runSecretSantaDraw() {
+  const confirmed = confirm(
+    "Are you sure you want to run the Secret Santa draw? " +
+    "This can only be done once, after registration has closed."
+  );
+
+  if (!confirmed) return;
+
+  const buttonConfirmed = confirm(
+    "Please confirm: registration is closed and you are ready to assign everyone."
+  );
+
+  if (!buttonConfirmed) return;
+
+  const { data, error } = await db.rpc("run_secret_santa_draw");
+
+  if (error) {
+    alert("The draw could not be completed:\n" + error.message);
+    return;
+  }
+
+  alert(
+    "🎄 Secret Santa draw completed! " +
+    data + " participants have been assigned."
+  );
 
   await loadHostDashboard();
 }
