@@ -123,6 +123,13 @@ h1 {
   50% { opacity:.65; }
 }
 
+.music-hint {
+  color:#f5e4d2;
+  font-size:12px;
+  margin-top:12px;
+  display:none;
+}
+
 .envelope-area { margin:42px auto 30px; }
 
 .envelope {
@@ -180,9 +187,7 @@ h1 {
 
 .envelope.open .seal { opacity:0; }
 
-.message {
-  display:none;
-}
+.message { display:none; }
 
 .message.show {
   display:block;
@@ -334,7 +339,6 @@ footer {
   main { padding-top:28px; }
   .subtitle { font-size:16px; }
   .tap-hint { font-size:18px; }
-
   .message.show { padding:22px 17px; }
 }
 </style>
@@ -376,6 +380,10 @@ footer {
     </div>
     <p class="tap-hint">✦ Tippe auf den Umschlag, um deine Einladung zu öffnen ✦</p>
   </div>
+
+  <p class="music-hint" id="musicHint">
+    Tap anywhere to enjoy the Christmas music
+  </p>
 
   <div class="envelope-area">
     <div class="envelope" id="envelope"
@@ -511,95 +519,25 @@ footer {
 
 <footer>✦ Made with love for the Happ-Mashonga family ✦</footer>
 
+<button onclick="hostSignIn()" style="position:fixed;bottom:12px;right:12px;z-index:1000;background:#244b35;color:white;padding:10px 16px;border:1px solid #d4af37;border-radius:8px;cursor:pointer;">
+  Host Sign In
+</button>
+
 <!-- Supabase JavaScript library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  // Happ-Mashonga Christmas Santa greeting
-let santaGreetingStarted = false;
-
-function playSantaGreeting() {
-  if (santaGreetingStarted) return;
-  santaGreetingStarted = true;
-
-  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-  let audioContext = null;
-
-  if (AudioContextClass) {
-    audioContext = new AudioContextClass();
-    audioContext.resume();
-  }
-
-  function playJingle() {
-    if (!audioContext) return;
-
-    const notes = [784, 659, 784, 1047, 880, 784, 659, 784];
-    const start = audioContext.currentTime;
-
-    notes.forEach((frequency, i) => {
-      const oscillator = audioContext.createOscillator();
-      const volume = audioContext.createGain();
-      const time = start + i * 0.22;
-
-      oscillator.type = "sine";
-      oscillator.frequency.value = frequency;
-
-      volume.gain.setValueAtTime(0.001, time);
-      volume.gain.exponentialRampToValueAtTime(0.12, time + 0.02);
-      volume.gain.exponentialRampToValueAtTime(0.001, time + 0.35);
-
-      oscillator.connect(volume);
-      volume.connect(audioContext.destination);
-
-      oscillator.start(time);
-      oscillator.stop(time + 0.36);
-    });
-  }
-
-  if (!window.speechSynthesis) {
-    playJingle();
-    return;
-  }
-
-  function speak(message, language, next) {
-    const greeting = new SpeechSynthesisUtterance(message);
-    greeting.lang = language;
-    greeting.rate = 0.82;
-    greeting.pitch = 0.85;
-    greeting.volume = 1;
-
-    greeting.onend = next;
-    greeting.onerror = next;
-
-    window.speechSynthesis.speak(greeting);
-  }
-
-  speak("Ho, ho, ho! Merry Christmas!", "en-GB", function () {
-    speak("Ho, ho, ho! Frohe Weihnachten!", "de-DE", playJingle);
-  });
-}
-
-document.addEventListener("pointerdown", playSantaGreeting, { once: true });
 
 <script>
-
 // ================================================
-// ADD YOUR SUPABASE DETAILS BELOW
-// Use your Project URL and PUBLISHABLE key.
-// Never use a secret or service-role key here.
+// SUPABASE CONNECTION
 // ================================================
 
-const SUPABASE_URL = "https://dfvhzknfcnzydzrkgwua.supabase.co"
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_S_WApSukT_pPoSnpa6U5KQ_x3SvfgYA"
+const SUPABASE_URL = "https://dfvhzknfcnzydzrkgwua.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_S_WApSukT_pPoSnpa6U5KQ_x3SvfgYA";
 
-// Create the Supabase connection
 let db = null;
 
 try {
-  if (
-    window.supabase &&
-    SUPABASE_URL.startsWith("https://") &&
-    !SUPABASE_URL.includes("PASTE_") &&
-    !SUPABASE_PUBLISHABLE_KEY.includes("PASTE_")
-  ) {
+  if (window.supabase) {
     db = window.supabase.createClient(
       SUPABASE_URL,
       SUPABASE_PUBLISHABLE_KEY
@@ -609,32 +547,117 @@ try {
   console.error("Supabase connection setup error:", error);
 }
 
-let currentLanguage = "en";
+// ================================================
+// CHRISTMAS MUSIC
+// The MP3 must be in the same GitHub folder as
+// this index.html file and named christmas-jingle.mp3
+// ================================================
+
+const christmasAudio = new Audio("./christmas-jingle.mp3");
+christmasAudio.preload = "auto";
+christmasAudio.volume = 0.65;
+
+let musicStarted = false;
+let musicAttemptInProgress = false;
+
+function startChristmasMusic() {
+  if (musicStarted || musicAttemptInProgress) return;
+
+  musicAttemptInProgress = true;
+
+  const musicHint = document.getElementById("musicHint");
+
+  const playAttempt = christmasAudio.play();
+
+  if (playAttempt !== undefined) {
+    playAttempt.then(() => {
+      musicStarted = true;
+      musicAttemptInProgress = false;
+      if (musicHint) musicHint.style.display = "none";
+    }).catch(() => {
+      musicAttemptInProgress = false;
+      if (musicHint) {
+        musicHint.style.display = "block";
+        musicHint.textContent =
+          "Tap anywhere to enjoy the Christmas music";
+      }
+    });
+  } else {
+    musicStarted = true;
+    musicAttemptInProgress = false;
+  }
+}
+
+// Try to start the music as soon as the page loads.
+window.addEventListener("load", startChristmasMusic);
+
+// If the browser blocks autoplay, the first visitor
+// interaction will start the music.
+document.addEventListener("pointerdown", startChristmasMusic, {
+  once:true
+});
+
+document.addEventListener("keydown", startChristmasMusic, {
+  once:true
+});
+
+// ================================================
+// LANGUAGE
+// ================================================
+
+let currentLanguage =
+  navigator.language && navigator.language.toLowerCase().startsWith("de")
+    ? "de"
+    : "en";
+
 let opened = false;
 
-function switchLanguage() {
-  currentLanguage = currentLanguage === "en" ? "de" : "en";
+function setLanguageDisplay() {
+  document.getElementById("english").classList.toggle(
+    "hidden", currentLanguage !== "en"
+  );
 
-  document.getElementById("english").classList.toggle("hidden");
-  document.getElementById("german").classList.toggle("hidden");
+  document.getElementById("german").classList.toggle(
+    "hidden", currentLanguage !== "de"
+  );
 
-  document.getElementById("englishMessage").classList.toggle("hidden");
-  document.getElementById("germanMessage").classList.toggle("hidden");
+  document.getElementById("englishMessage").classList.toggle(
+    "hidden", currentLanguage !== "en"
+  );
+
+  document.getElementById("germanMessage").classList.toggle(
+    "hidden", currentLanguage !== "de"
+  );
 
   document.getElementById("language").textContent =
     currentLanguage === "en" ? "Deutsch" : "English";
 
   document.documentElement.lang = currentLanguage;
+}
 
+function switchLanguage() {
+  currentLanguage = currentLanguage === "en" ? "de" : "en";
+  setLanguageDisplay();
   updateFormLanguage();
-  async function hostSignIn() {
+}
+
+// ================================================
+// HOST SIGN-IN
+// ================================================
+
+async function hostSignIn() {
+  if (!db) {
+    alert("The connection to the host system is unavailable.");
+    return;
+  }
+
   const email = prompt("Enter your host email address:");
   if (!email) return;
 
   const password = prompt("Enter your host password:");
   if (!password) return;
 
-  const { data, error } = await db.auth.signInWithPassword({
+  const { error } = await db.auth.signInWithPassword({
     email,
     password
   });
@@ -655,19 +678,22 @@ function switchLanguage() {
 
   alert("Host sign-in successful!");
 }
-}
+
+// ================================================
+// ENVELOPE AND INVITATION
+// ================================================
 
 function openEnvelope() {
   if (opened) return;
   opened = true;
+
+  startChristmasMusic();
 
   document.getElementById("envelope").classList.add("open");
 
   setTimeout(() => {
     document.getElementById("message").classList.add("show");
   }, 700);
-
-  playSantaGreeting();
 }
 
 document.getElementById("envelope").addEventListener("keydown", function(event) {
@@ -699,6 +725,10 @@ function backToInvitation() {
     document.getElementById("germanMessage").classList.remove("hidden");
   }
 }
+
+// ================================================
+// REGISTRATION TRANSLATIONS
+// ================================================
 
 function updateFormLanguage() {
   const german = currentLanguage === "de";
@@ -798,6 +828,10 @@ function updateFormLanguage() {
   window.formTranslations = translations;
 }
 
+// ================================================
+// COUNTRY AND GIFT BUDGET
+// ================================================
+
 document.getElementById("country").addEventListener("change", function() {
   const budget = this.value === "UK" ? "£20" :
                  this.value === "Germany" ? "€25" : "";
@@ -812,15 +846,17 @@ document.getElementById("country").addEventListener("change", function() {
   }
 });
 
+// ================================================
+// REGISTRATION SUBMISSION
+// ================================================
+
 document.getElementById("registrationForm").addEventListener("submit", async function(event) {
   event.preventDefault();
 
   const translations = window.formTranslations;
-
   const submitButton = document.getElementById("submitButton");
   const status = document.getElementById("formStatus");
 
-  // Basic hidden-field spam check
   if (document.getElementById("website").value !== "") {
     status.textContent = translations.failed;
     return;
@@ -901,7 +937,10 @@ document.getElementById("registrationForm").addEventListener("submit", async fun
   }
 });
 
-// Falling snow
+// ================================================
+// FALLING SNOW
+// ================================================
+
 const snow = document.getElementById("snow");
 
 for (let i = 0; i < 55; i++) {
@@ -915,73 +954,10 @@ for (let i = 0; i < 55; i++) {
   snow.appendChild(flake);
 }
 
+// Set the initial language based on the visitor's browser.
+setLanguageDisplay();
 updateFormLanguage();
-  
-// Happ-Mashonga Christmas Santa greeting
-let santaGreetingStarted = false;
-
-function playSantaGreeting() {
-  if (santaGreetingStarted) return;
-  santaGreetingStarted = true;
-
-  // Play a little Christmas jingle
-  try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (AudioContextClass) {
-      const audio = new AudioContextClass();
-      audio.resume();
-
-      const notes = [
-        [659, 0], [659, 0.22], [659, 0.44],
-        [659, 0.9], [659, 1.12], [659, 1.34],
-        [659, 1.78], [784, 2.0], [523, 2.22],
-        [587, 2.44], [659, 2.66]
-      ];
-
-      notes.forEach(([frequency, start]) => {
-        const oscillator = audio.createOscillator();
-        const volume = audio.createGain();
-
-        oscillator.type = "sine";
-        oscillator.frequency.value = frequency;
-        volume.gain.setValueAtTime(0.0001, audio.currentTime + start);
-        volume.gain.linearRampToValueAtTime(0.09, audio.currentTime + start + 0.03);
-        volume.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + start + 0.2);
-
-        oscillator.connect(volume);
-        volume.connect(audio.destination);
-        oscillator.start(audio.currentTime + start);
-        oscillator.stop(audio.currentTime + start + 0.22);
-      });
-
-      setTimeout(() => audio.close(), 3500);
-    }
-  } catch (error) {
-    console.log("Jingle could not play:", error);
-  }
-
-  // Santa speaks in the selected website language
-  if (!("speechSynthesis" in window)) return;
-
-  window.speechSynthesis.cancel();
-
-  const german = currentLanguage === "de";
-  const greeting = german
-    ? "Ho ho ho! Frohe Weihnachten, liebe Happ-Mashonga Familie! Willkommen zu eurem Weihnachtswichteln. Habt eine wunderschöne Weihnachtszeit!"
-    : "Ho ho ho! Merry Christmas, dear Happ-Mashonga family! Welcome to your family Secret Santa. Have a wonderful Christmas!";
-
-  const speech = new SpeechSynthesisUtterance(greeting);
-  speech.lang = german ? "de-DE" : "en-GB";
-  speech.rate = 0.85;
-  speech.pitch = 0.8;
-  speech.volume = 1;
-
-  window.speechSynthesis.speak(speech);
-}
 
 </script>
 </body>
-  <button onclick="hostSignIn()" style="position:fixed;bottom:12px;right:12px;z-index:1000;background:#244b35;color:white;padding:10px 16px;border:1px solid #d4af37;border-radius:8px;cursor:pointer;">
-  Host Sign In
-</button>
 </html>
