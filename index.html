@@ -4,16 +4,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happ-Mashonga Christmas</title>
+
+<title>Happ-Mashonga Family Secret Santa 2026</title>
+
 <style>
 :root {
   --wine: #4b101e;
-  --red: #781d2c;
+  --red: #8d2035;
   --gold: #d9b568;
   --cream: #fff5e6;
   --green: #173d30;
 }
-* { box-sizing: border-box; }
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -25,6 +31,7 @@ body {
   text-align: center;
   overflow-x: hidden;
 }
+
 .snow {
   position: fixed;
   inset: 0;
@@ -32,6 +39,7 @@ body {
   overflow: hidden;
   z-index: 1;
 }
+
 .flake {
   position: absolute;
   top: -20px;
@@ -39,20 +47,27 @@ body {
   opacity: .75;
   animation: fall linear infinite;
 }
+
 @keyframes fall {
-  to { transform: translateY(110vh) rotate(360deg); }
+  to {
+    transform: translateY(110vh) rotate(360deg);
+  }
 }
+
 .top {
   padding: 25px 18px;
   position: relative;
   z-index: 2;
 }
+
 .brand {
   color: var(--gold);
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   font-size: 13px;
   text-transform: uppercase;
+  padding: 0 65px;
 }
+
 .language {
   position: absolute;
   right: 18px;
@@ -64,29 +79,48 @@ body {
   padding: 8px 12px;
   cursor: pointer;
 }
+
 main {
   position: relative;
   z-index: 2;
-  padding: 45px 20px 80px;
+  padding: 35px 20px 45px;
   max-width: 750px;
   margin: auto;
 }
+
+.eyebrow {
+  color: var(--gold);
+  letter-spacing: 3px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
 h1 {
   color: var(--gold);
-  font-size: clamp(36px, 7vw, 62px);
+  font-size: clamp(38px, 7vw, 62px);
   font-weight: normal;
   line-height: 1.1;
-  margin: 10px 0 18px;
+  margin: 12px 0 18px;
 }
+
 .subtitle {
   font-size: 18px;
   line-height: 1.7;
   color: #f5e4d2;
 }
+
+.details {
+  color: var(--gold);
+  font-size: 14px;
+  line-height: 1.8;
+  margin-top: 22px;
+}
+
 .envelope-area {
-  margin: 55px auto 35px;
+  margin: 38px auto 25px;
   perspective: 800px;
 }
+
 .envelope {
   width: 210px;
   height: 140px;
@@ -96,7 +130,13 @@ h1 {
   background: #9e293c;
   border-radius: 5px;
   box-shadow: 0 15px 35px #0008;
+  transition: transform .3s;
 }
+
+.envelope:hover {
+  transform: translateY(-5px);
+}
+
 .envelope:before {
   content: "";
   position: absolute;
@@ -107,9 +147,11 @@ h1 {
   transition: transform .8s;
   z-index: 3;
 }
+
 .envelope.open:before {
   transform: rotateX(180deg);
 }
+
 .envelope:after {
   content: "";
   position: absolute;
@@ -118,6 +160,7 @@ h1 {
   clip-path: polygon(0 100%, 50% 48%, 100% 100%);
   z-index: 2;
 }
+
 .seal {
   position: absolute;
   z-index: 4;
@@ -134,177 +177,379 @@ h1 {
   box-shadow: 0 2px 9px #0007;
   transition: opacity .4s;
 }
-.envelope.open .seal { opacity: 0; }
+
+.envelope.open .seal {
+  opacity: 0;
+}
+
+.tap-hint {
+  color: var(--gold);
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+/* Centred message pop-up */
+
 .message {
   display: none;
-  max-width: 520px;
-  margin: 30px auto;
-  padding: 28px 22px;
+}
+
+.message.show {
+  display: block;
+  position: fixed;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(520px, calc(100vw - 32px));
+  max-height: 82vh;
+  overflow-y: auto;
+  margin: 0;
+  padding: 28px 24px;
   border: 1px solid var(--gold);
   background: #fff4e9;
   color: #4b1722;
-  border-radius: 5px;
-  box-shadow: 0 10px 30px #0005;
-  animation: appear 1s ease;
+  border-radius: 6px;
+  box-shadow: 0 0 0 100vmax #000a, 0 15px 45px #0008;
+  animation: appear .7s ease;
 }
-.message.show { display: block; }
+
 @keyframes appear {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
+
 .message h2 {
   color: #8c2939;
-  font-size: 29px;
+  font-size: clamp(24px, 5vw, 32px);
   font-weight: normal;
+  line-height: 1.3;
 }
-.message p { line-height: 1.7; }
+
+.message p {
+  line-height: 1.7;
+}
+
 .gold-button {
   display: inline-block;
   background: linear-gradient(135deg, #f2d38c, #bd8b3d);
   color: #421521;
   border: none;
   border-radius: 3px;
-  padding: 15px 28px;
+  padding: 15px 24px;
   font-family: Georgia, serif;
   font-size: 16px;
   cursor: pointer;
-  text-decoration: none;
-  margin-top: 20px;
+  margin-top: 15px;
 }
-.gold-button:hover { filter: brightness(1.1); }
+
+.gold-button:hover {
+  filter: brightness(1.1);
+}
+
+.close-button {
+  display: block;
+  margin: 18px auto 0;
+  color: #79505a;
+  background: transparent;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: Georgia, serif;
+}
+
 footer {
   position: relative;
   z-index: 2;
-  padding: 25px;
+  padding: 20px;
   color: #d6b987;
   font-size: 13px;
 }
-.hidden { display: none !important; }
+
+.hidden {
+  display: none !important;
+}
+
 @media(max-width:480px) {
-  main { padding-top: 30px; }
-  .language { top: 55px; }
+  .top {
+    padding-top: 22px;
+  }
+
+  .brand {
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 0 55px 0 0;
+  }
+
+  .language {
+    top: 15px;
+  }
+
+  main {
+    padding-top: 28px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  .message.show {
+    padding: 24px 18px;
+    max-height: 85vh;
+  }
 }
 </style>
 </head>
+
 <body>
+
 <div class="snow" id="snow"></div>
 
 <header class="top">
-  <div class="brand">A Christmas to Remember</div>
-  <button class="language" id="language" onclick="switchLanguage()">Deutsch</button>
+  <div class="brand">
+    HAPP-MASHONGA FAMILY SECRET SANTA 2026
+  </div>
+
+  <button
+    class="language"
+    id="language"
+    onclick="switchLanguage()">
+    Deutsch
+  </button>
 </header>
 
 <main>
+
   <div id="english">
-    <h1>Happ-Mashonga<br>Christmas</h1>
+
+    <div class="eyebrow">The most wonderful time of the year</div>
+
+    <h1>Secret Santa<br>2026</h1>
+
     <p class="subtitle">
-      A little Christmas magic, a little mystery,<br>
-      and a whole lot of giving.
+      The Happ-Mashonga Family Christmas Gift Exchange
     </p>
-    <p>✦ ✦ ✦</p>
-    <p>Something special is waiting for you...</p>
-    <p>Tap the envelope to open your Christmas surprise.</p>
+
+    <p>
+      One family. A little mystery. A lot of Christmas magic.
+    </p>
+
+    <div class="details">
+      UK gift budget: £20<br>
+      Germany gift budget: €25<br>
+      Registration closes: 30 November 2026
+    </div>
+
+    <p class="tap-hint">
+      ✦ Tap the envelope to open your invitation ✦
+    </p>
+
   </div>
 
   <div id="german" class="hidden">
-    <h1>Happ-Mashonga<br>Weihnachten</h1>
+
+    <div class="eyebrow">Die schönste Zeit des Jahres</div>
+
+    <h1>Wichteln<br>2026</h1>
+
     <p class="subtitle">
-      Ein bisschen Weihnachtszauber, ein bisschen Geheimnis<br>
-      und ganz viel Freude am Schenken.
+      Das Weihnachtsgeschenkspiel der Familie Happ-Mashonga
     </p>
-    <p>✦ ✦ ✦</p>
-    <p>Etwas Besonderes wartet auf dich...</p>
-    <p>Tippe auf den Umschlag, um deine Weihnachtsüberraschung zu öffnen.</p>
+
+    <p>
+      Eine Familie. Ein kleines Geheimnis. Ganz viel Weihnachtszauber.
+    </p>
+
+    <div class="details">
+      Geschenkbudget UK: £20<br>
+      Geschenkbudget Deutschland: €25<br>
+      Anmeldeschluss: 30. November 2026
+    </div>
+
+    <p class="tap-hint">
+      ✦ Tippe auf den Umschlag, um deine Einladung zu öffnen ✦
+    </p>
+
   </div>
 
   <div class="envelope-area">
-    <div class="envelope" id="envelope" onclick="openEnvelope()">
+
+    <div
+      class="envelope"
+      id="envelope"
+      onclick="openEnvelope()"
+      role="button"
+      tabindex="0"
+      aria-label="Open Christmas invitation">
+
       <div class="seal">✦</div>
+
     </div>
+
   </div>
 
-  <section class="message" id="message">
-    <div id="englishMessage">
-      <h2>Happy Happ-Mashonga Christmas!</h2>
-      <p>
-        The most wonderful gifts are not always wrapped.
-        They are the laughter, kindness and memories we
-        share with the people we love.
-      </p>
-      <p>
-        This Christmas, let's make someone's season
-        a little more magical.
-      </p>
-      <p>With love, the Happ-Mashonga family ❤️</p>
-      <button class="gold-button" onclick="registrationNotice()">
-        Join the Christmas magic
-      </button>
-    </div>
-    <div id="germanMessage" class="hidden">
-      <h2>Frohe Happ-Mashonga Weihnachten!</h2>
-      <p>
-        Die schönsten Geschenke sind nicht immer eingepackt.
-        Es sind das Lachen, die Herzlichkeit und die
-        Erinnerungen, die wir miteinander teilen.
-      </p>
-      <p>
-        Lasst uns dieses Weihnachten jemandem
-        eine besondere Freude bereiten.
-      </p>
-      <p>In Liebe, die Familie Happ-Mashonga ❤️</p>
-      <button class="gold-button" onclick="registrationNotice()">
-        Sei dabei
-      </button>
-    </div>
-  </section>
 </main>
+
+<section class="message" id="message">
+
+  <div id="englishMessage">
+
+    <div class="eyebrow">A special invitation</div>
+
+    <h2>Happy Happ-Mashonga Christmas!</h2>
+
+    <p>
+      You're invited to our 2026 family Secret Santa!
+    </p>
+
+    <p>
+      The most wonderful gifts are not always wrapped.
+      They are the laughter, kindness and memories we
+      share with the people we love.
+    </p>
+
+    <p>
+      This Christmas, you'll be secretly assigned
+      someone special to surprise with a gift.
+    </p>
+
+    <p>
+      <strong>UK: £20 | Germany: €25</strong><br>
+      Registration closes 30 November 2026.
+    </p>
+
+    <button class="gold-button" onclick="registrationNotice()">
+      Register for Secret Santa
+    </button>
+
+    <button class="close-button" onclick="closeMessage()">
+      Close invitation
+    </button>
+
+  </div>
+
+  <div id="germanMessage" class="hidden">
+
+    <div class="eyebrow">Eine besondere Einladung</div>
+
+    <h2>Frohe Happ-Mashonga Weihnachten!</h2>
+
+    <p>
+      Du bist herzlich zu unserem Familien-Wichteln 2026 eingeladen!
+    </p>
+
+    <p>
+      Die schönsten Geschenke sind nicht immer eingepackt.
+      Es sind das Lachen, die Herzlichkeit und die
+      Erinnerungen, die wir miteinander teilen.
+    </p>
+
+    <p>
+      Dieses Weihnachten wird dir heimlich eine
+      besondere Person zugelost, die du beschenken darfst.
+    </p>
+
+    <p>
+      <strong>UK: £20 | Deutschland: €25</strong><br>
+      Anmeldeschluss: 30. November 2026.
+    </p>
+
+    <button class="gold-button" onclick="registrationNotice()">
+      Für Secret Santa anmelden
+    </button>
+
+    <button class="close-button" onclick="closeMessage()">
+      Einladung schliessen
+    </button>
+
+  </div>
+
+</section>
 
 <footer>
   ✦ Made with love for the Happ-Mashonga family ✦
 </footer>
 
 <script>
+
 let currentLanguage = "en";
 let opened = false;
 
 function switchLanguage() {
+
   currentLanguage = currentLanguage === "en" ? "de" : "en";
+
   document.getElementById("english").classList.toggle("hidden");
   document.getElementById("german").classList.toggle("hidden");
+
   document.getElementById("englishMessage").classList.toggle("hidden");
   document.getElementById("germanMessage").classList.toggle("hidden");
+
   document.getElementById("language").textContent =
     currentLanguage === "en" ? "Deutsch" : "English";
+
   document.documentElement.lang = currentLanguage;
 }
 
 function openEnvelope() {
+
   if (opened) return;
+
   opened = true;
+
   document.getElementById("envelope").classList.add("open");
+
   setTimeout(() => {
     document.getElementById("message").classList.add("show");
   }, 700);
 }
 
+function closeMessage() {
+
+  document.getElementById("message").classList.remove("show");
+
+}
+
 function registrationNotice() {
-  alert(currentLanguage === "en"
-    ? "Registration is coming soon! Please check back shortly."
-    : "Die Anmeldung beginnt bald! Bitte schau bald wieder vorbei.");
+
+  alert(
+    currentLanguage === "en"
+      ? "Thank you for your interest! The Secret Santa registration form is coming soon."
+      : "Vielen Dank für dein Interesse! Das Anmeldeformular kommt bald."
+  );
+
 }
 
 // Decorative falling snow
+
 const snow = document.getElementById("snow");
+
 for (let i = 0; i < 55; i++) {
+
   const flake = document.createElement("span");
+
   flake.className = "flake";
   flake.textContent = "❄";
+
   flake.style.left = Math.random() * 100 + "%";
   flake.style.fontSize = (8 + Math.random() * 13) + "px";
-  flake.style.animationDuration = (7 + Math.random() * 12) + "s";
-  flake.style.animationDelay = (-Math.random() * 15) + "s";
+
+  flake.style.animationDuration =
+    (7 + Math.random() * 12) + "s";
+
+  flake.style.animationDelay =
+    (-Math.random() * 15) + "s";
+
   snow.appendChild(flake);
+
 }
+
 </script>
+
 </body>
 </html>
+
