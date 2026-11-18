@@ -645,6 +645,7 @@ function switchLanguage() {
 // HOST SIGN-IN
 // ================================================
 
+
 async function hostSignIn() {
   if (!db) {
     alert("The connection to the host system is unavailable.");
@@ -676,8 +677,139 @@ async function hostSignIn() {
     return;
   }
 
-  alert("Host sign-in successful!");
+  await showHostDashboard();
 }
+
+function escapeDashboardText(value) {
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[character]);
+}
+
+async function showHostDashboard() {
+  let dashboard = document.getElementById("host-dashboard");
+
+  if (!dashboard) {
+    dashboard = document.createElement("section");
+    dashboard.id = "host-dashboard";
+    document.body.appendChild(dashboard);
+  }
+
+  dashboard.style.cssText = `
+    display:block;
+    position:relative;
+    z-index:1000;
+    background:#f8f3e9;
+    color:#263c30;
+    padding:30px 18px;
+    min-height:100vh;
+    font-family:Georgia,serif;
+  `;
+
+  dashboard.innerHTML = `
+    <div style="max-width:1000px;margin:auto">
+      <h1 style="color:#762c35">🎄 Happ-Mashonga Host Dashboard</h1>
+      <p>Welcome, host! Here you can manage your family Secret Santa.</p>
+      <button onclick="loadHostDashboard()"
+        style="padding:10px 18px;background:#244b38;color:white;border:0;border-radius:6px;cursor:pointer">
+        Refresh dashboard
+      </button>
+      <button onclick="hostSignOut()"
+        style="padding:10px 18px;background:#762c35;color:white;border:0;border-radius:6px;cursor:pointer">
+        Sign out
+      </button>
+      <div id="host-dashboard-content" style="margin-top:25px">
+        Loading participants...
+      </div>
+    </div>
+  `;
+
+  dashboard.scrollIntoView({ behavior: "smooth" });
+  await loadHostDashboard();
+}
+
+async function loadHostDashboard() {
+  const content = document.getElementById("host-dashboard-content");
+  if (!content) return;
+
+  content.textContent = "Loading participants...";
+
+  const { data, error } =
+    await db.rpc("get_host_dashboard_data");
+
+  if (error) {
+    content.textContent = "Could not load dashboard: " + error.message;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    content.textContent = "No participants have registered yet.";
+    return;
+  }
+
+  content.innerHTML = `
+    <h2>Registered participants (${data.length})</h2>
+    ${data.map(person => `
+      <article style="background:white;border:1px solid #d9cbb5;border-radius:10px;padding:18px;margin:15px 0">
+        <h3 style="color:#762c35;margin-top:0">
+          ${escapeDashboardText(person.full_name)}
+        </h3>
+        <p><strong>Email:</strong> ${escapeDashboardText(person.email)}</p>
+        <p><strong>Country:</strong> ${escapeDashboardText(person.country)}</p>
+        <p><strong>Registered:</strong> ${person.registered_at ? new Date(person.registered_at).toLocaleDateString() : "Unknown"}</p>
+
+        <h4>Gift wishes</h4>
+        <ol>
+          ${(person.wishes || []).map(wish =>
+            `<li>${escapeDashboardText(wish)}</li>`
+          ).join("")}
+        </ol>
+
+        <p><strong>Secret Santa recipient:</strong>
+          ${escapeDashboardText(person.recipient_name || "Not assigned yet")}
+        </p>
+
+        <p><strong>Gift status:</strong>
+          ${person.gift_received ? "✅ Gift received" : "⏳ Not yet received"}
+        </p>
+
+        <button
+          onclick="changeGiftStatus('${person.participant_id}', ${!person.gift_received})"
+          style="padding:9px 14px;background:#244b38;color:white;border:0;border-radius:6px;cursor:pointer">
+          Mark gift as ${person.gift_received ? "not received" : "received"}
+        </button>
+      </article>
+    `).join("")}
+  `;
+}
+
+async function changeGiftStatus(participantId, received) {
+  const { error } = await db.rpc("update_gift_status", {
+    p_participant_id: participantId,
+    p_received: received
+  });
+
+  if (error) {
+    alert("Could not update gift status: " + error.message);
+    return;
+  }
+
+  await loadHostDashboard();
+}
+
+async function hostSignOut() {
+  await db.auth.signOut();
+
+  const dashboard = document.getElementById("host-dashboard");
+  if (dashboard) dashboard.remove();
+
+  alert("You have signed out.");
+}
+
 
 // ================================================
 // ENVELOPE AND INVITATION
