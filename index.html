@@ -627,7 +627,142 @@ function switchLanguage() {
   document.documentElement.lang = currentLanguage;
 
   updateFormLanguage();
-  async function hostSignIn() {
+ async function hostSignIn() {
+  const email = prompt("Enter your host email:");
+  if (!email) return;
+
+  const password = prompt("Enter your host password:");
+  if (!password) return;
+
+  const { error } = await db.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    alert("Sign-in failed: " + error.message);
+    return;
+  }
+
+  const { data: isHost, error: hostError } =
+    await db.rpc("check_host_access");
+
+  if (hostError || !isHost) {
+    await db.auth.signOut();
+    alert("You do not have host access.");
+    return;
+  }
+
+  await showHostDashboard();
+}
+
+async function showHostDashboard() {
+  const { data, error } =
+    await db.rpc("get_host_dashboard_data");
+
+  if (error) {
+    alert("Could not load dashboard: " + error.message);
+    return;
+  }
+
+  const { data: drawDone, error: drawError } =
+    await db.rpc("get_draw_status");
+
+  if (drawError) {
+    alert("Could not check draw status.");
+    return;
+  }
+
+  const safe = value => String(value ?? "").replace(
+    /[&<>"']/g,
+    character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[character]
+  );
+
+  let dashboard = document.getElementById("hostDashboard");
+
+  if (!dashboard) {
+    dashboard = document.createElement("div");
+    dashboard.id = "hostDashboard";
+    document.body.appendChild(dashboard);
+  }
+
+  dashboard.style.cssText =
+    "position:fixed;inset:0;z-index:10000;background:#f8f3e9;" +
+    "color:#263b2d;overflow:auto;padding:24px;font-family:Arial,sans-serif;";
+
+  dashboard.innerHTML = `
+    <div style="max-width:850px;margin:auto;">
+      <h1>🎄 Happ-Mashonga Christmas</h1>
+      <h2>Private Host Dashboard</h2>
+
+      <p><strong>Registered family members:</strong> ${data.length}</p>
+      <p><strong>Secret Santa draw:</strong>
+        ${drawDone ? "Completed" : "Not yet completed"}
+      </p>
+
+      <button id="refreshDashboard">Refresh</button>
+      <button id="closeDashboard">Close dashboard</button>
+
+      <hr>
+      <h2>Family registrations</h2>
+
+      ${data.map(person => `
+        <div style="background:white;padding:16px;margin:14px 0;
+          border:1px solid #d4af37;border-radius:10px;">
+          <h3>${safe(person.full_name)}</h3>
+          <p>${safe(person.email)}</p>
+          <p>Country: ${safe(person.country)}</p>
+          <p><strong>Gift wishes:</strong></p>
+          <ol>
+            ${person.wishes.map(wish => `<li>${safe(wish)}</li>`).join("")}
+          </ol>
+          <p>Secret Santa recipient:
+            ${person.recipient_name ? safe(person.recipient_name) : "Not drawn yet"}
+          </p>
+          <p>Gift received:
+            ${person.gift_received ? "Yes" : "No"}
+          </p>
+          ${drawDone ? `
+            <button class="giftStatus"
+              data-id="${safe(person.participant_id)}"
+              data-received="${!person.gift_received}">
+              Mark gift ${person.gift_received ? "not received" : "received"}
+            </button>
+          ` : ""}
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  document.getElementById("refreshDashboard").onclick =
+    showHostDashboard;
+
+  document.getElementById("closeDashboard").onclick = async () => {
+    dashboard.remove();
+    await db.auth.signOut();
+  };
+
+  dashboard.querySelectorAll(".giftStatus").forEach(button => {
+    button.onclick = async () => {
+      const { error } = await db.rpc("update_gift_status", {
+        p_participant_id: button.dataset.id,
+        p_received: button.dataset.received === "true"
+      });
+
+      if (error) {
+        alert("Could not update gift status.");
+      } else {
+        showHostDashboard();
+      }
+    };
+  });
+}
   const email = prompt("Enter your host email address:");
   if (!email) return;
 
