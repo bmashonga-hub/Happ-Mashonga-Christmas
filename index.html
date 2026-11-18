@@ -513,6 +513,71 @@ footer {
 
 <!-- Supabase JavaScript library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  // Happ-Mashonga Christmas Santa greeting
+let santaGreetingStarted = false;
+
+function playSantaGreeting() {
+  if (santaGreetingStarted) return;
+  santaGreetingStarted = true;
+
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  let audioContext = null;
+
+  if (AudioContextClass) {
+    audioContext = new AudioContextClass();
+    audioContext.resume();
+  }
+
+  function playJingle() {
+    if (!audioContext) return;
+
+    const notes = [784, 659, 784, 1047, 880, 784, 659, 784];
+    const start = audioContext.currentTime;
+
+    notes.forEach((frequency, i) => {
+      const oscillator = audioContext.createOscillator();
+      const volume = audioContext.createGain();
+      const time = start + i * 0.22;
+
+      oscillator.type = "sine";
+      oscillator.frequency.value = frequency;
+
+      volume.gain.setValueAtTime(0.001, time);
+      volume.gain.exponentialRampToValueAtTime(0.12, time + 0.02);
+      volume.gain.exponentialRampToValueAtTime(0.001, time + 0.35);
+
+      oscillator.connect(volume);
+      volume.connect(audioContext.destination);
+
+      oscillator.start(time);
+      oscillator.stop(time + 0.36);
+    });
+  }
+
+  if (!window.speechSynthesis) {
+    playJingle();
+    return;
+  }
+
+  function speak(message, language, next) {
+    const greeting = new SpeechSynthesisUtterance(message);
+    greeting.lang = language;
+    greeting.rate = 0.82;
+    greeting.pitch = 0.85;
+    greeting.volume = 1;
+
+    greeting.onend = next;
+    greeting.onerror = next;
+
+    window.speechSynthesis.speak(greeting);
+  }
+
+  speak("Ho, ho, ho! Merry Christmas!", "en-GB", function () {
+    speak("Ho, ho, ho! Frohe Weihnachten!", "de-DE", playJingle);
+  });
+}
+
+document.addEventListener("pointerdown", playSantaGreeting, { once: true });
 
 <script>
 
