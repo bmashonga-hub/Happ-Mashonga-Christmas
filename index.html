@@ -921,63 +921,57 @@ updateFormLanguage();
 let santaGreetingStarted = false;
 
 function playSantaGreeting() {
+  
+let santaGreetingStarted = false;
+
+function playSantaGreeting() {
   if (santaGreetingStarted) return;
   santaGreetingStarted = true;
 
-  // Play a little Christmas jingle
   try {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (AudioContextClass) {
-      const audio = new AudioContextClass();
-      audio.resume();
+    if (!AudioContextClass) return;
 
-      const notes = [
-        [659, 0], [659, 0.22], [659, 0.44],
-        [659, 0.9], [659, 1.12], [659, 1.34],
-        [659, 1.78], [784, 2.0], [523, 2.22],
-        [587, 2.44], [659, 2.66]
-      ];
+    const audio = new AudioContextClass();
+    audio.resume();
 
-      notes.forEach(([frequency, start]) => {
-        const oscillator = audio.createOscillator();
-        const volume = audio.createGain();
+    // A gentle, magical Christmas bell melody
+    const notes = [
+      [659, 0], [784, 0.35], [880, 0.7],
+      [784, 1.05], [659, 1.4], [587, 1.75],
+      [523, 2.1], [587, 2.45], [659, 2.8],
+      [784, 3.15], [659, 3.5], [523, 3.85],
+      [587, 4.2], [659, 4.55], [784, 4.9],
+      [880, 5.25], [784, 5.6], [659, 5.95]
+    ];
 
-        oscillator.type = "sine";
-        oscillator.frequency.value = frequency;
-        volume.gain.setValueAtTime(0.0001, audio.currentTime + start);
-        volume.gain.linearRampToValueAtTime(0.09, audio.currentTime + start + 0.03);
-        volume.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + start + 0.2);
+    notes.forEach(([frequency, start]) => {
+      const oscillator = audio.createOscillator();
+      const volume = audio.createGain();
 
-        oscillator.connect(volume);
-        volume.connect(audio.destination);
-        oscillator.start(audio.currentTime + start);
-        oscillator.stop(audio.currentTime + start + 0.22);
-      });
+      oscillator.type = "sine";
+      oscillator.frequency.value = frequency;
 
-      setTimeout(() => audio.close(), 3500);
-    }
+      volume.gain.setValueAtTime(0.0001, audio.currentTime + start);
+      volume.gain.exponentialRampToValueAtTime(
+        0.12, audio.currentTime + start + 0.03
+      );
+      volume.gain.exponentialRampToValueAtTime(
+        0.0001, audio.currentTime + start + 0.65
+      );
+
+      oscillator.connect(volume);
+      volume.connect(audio.destination);
+      oscillator.start(audio.currentTime + start);
+      oscillator.stop(audio.currentTime + start + 0.7);
+    });
+
+    setTimeout(() => audio.close(), 7500);
   } catch (error) {
-    console.log("Jingle could not play:", error);
+    console.log("Christmas jingle could not play:", error);
   }
-
-  // Santa speaks in the selected website language
-  if (!("speechSynthesis" in window)) return;
-
-  window.speechSynthesis.cancel();
-
-  const german = currentLanguage === "de";
-  const greeting = german
-    ? "Ho ho ho! Frohe Weihnachten, liebe Happ-Mashonga Familie! Willkommen zu eurem Weihnachtswichteln. Habt eine wunderschöne Weihnachtszeit!"
-    : "Ho ho ho! Merry Christmas, dear Happ-Mashonga family! Welcome to your family Secret Santa. Have a wonderful Christmas!";
-
-  const speech = new SpeechSynthesisUtterance(greeting);
-  speech.lang = german ? "de-DE" : "en-GB";
-  speech.rate = 0.85;
-  speech.pitch = 0.8;
-  speech.volume = 1;
-
-  window.speechSynthesis.speak(speech);
 }
+
 
 </script>
 </body>
