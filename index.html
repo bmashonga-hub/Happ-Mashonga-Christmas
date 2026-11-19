@@ -723,6 +723,11 @@ async function showHostDashboard() {
   style="padding:10px 18px;background:#b28a3b;color:white;border:0;border-radius:6px;cursor:pointer">
   🎅 Run Secret Santa Draw
 </button>
+
+<button onclick="sendSecretSantaEmails()"
+  style="padding:10px 18px;background:#762c35;color:white;border:0;border-radius:6px;cursor:pointer">
+  ✉️ Send Secret Santa Emails
+</button>
       <button onclick="hostSignOut()"
         style="padding:10px 18px;background:#762c35;color:white;border:0;border-radius:6px;cursor:pointer">
         Sign out
@@ -830,6 +835,38 @@ async function runSecretSantaDraw() {
   alert(
     "🎄 Secret Santa draw completed! " +
     data + " participants have been assigned."
+  );
+
+  await loadHostDashboard();
+}
+
+async function sendSecretSantaEmails() {
+  const confirmed = confirm(
+    "Are you sure you want to send the Secret Santa emails? " +
+    "Each participant will receive their own recipient's name and wishes."
+  );
+
+  if (!confirmed) return;
+
+  const { data, error } = await db.functions.invoke(
+    "send-secret-santa-emails"
+  );
+
+  if (error) {
+    alert("Email sending failed: " + error.message);
+    return;
+  }
+
+  if (!data || !data.success) {
+    alert("Email sending failed: " + (data?.error || "Unknown error"));
+    return;
+  }
+
+  alert(
+    data.count === 0
+      ? "All Secret Santa emails have already been processed."
+      : "🎄 Email process completed! " +
+        data.count + " assignments have been recorded."
   );
 
   await loadHostDashboard();
